@@ -1,0 +1,1 @@
+# online_shop_management_kuanysh
