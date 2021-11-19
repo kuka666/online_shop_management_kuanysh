@@ -21,7 +21,7 @@ public class Methods {
     public void Login_Cusstomer() throws SQLException {
         try (Connection conn = connect()) {
             PreparedStatement st = (PreparedStatement) conn
-                    .prepareStatement("Select name, email, password from customer where email=? and password=?"); // verification
+                    .prepareStatement("Select id, name, email, password from customer where email=? and password=?"); // verification
             System.out.println("Write your email:");
             String log = scan.nextLine();
             System.out.println("Enter your password:");
@@ -31,6 +31,15 @@ public class Methods {
             ResultSet rs = st.executeQuery();
             if (rs.next()) { // if the data match, then the application works on
                 System.out.println("You have successfully logged in Customer: " + rs.getString("name"));
+                System.out.println("Settings");
+                int ch = scan.nextInt();
+                switch (ch) {
+                    case 1 -> checkNotify(rs.getInt("id"));
+                    case 2 -> System.out.println("settings");
+                    case 3 -> System.out.println("check shop collection");
+                    case 4 -> System.out.println("check cart");
+                    default -> System.out.println("ERROR");
+                }
             } else {
                 System.out.println("Wrong Username & Password");
             }
@@ -71,5 +80,24 @@ public class Methods {
             ex.printStackTrace();
         }
     }
+    
+    public void checkNotify(int ids){
+        try (Connection connection = connect()) {
+            String sql = "select notification, is_sub from customer where id =?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1,ids);
+            ResultSet rs = statement.executeQuery();
+            if(rs.next()){
+                if(rs.getBoolean("is_sub"))
+                    System.out.println("Notification: "+rs.getString("notification"));
+                else
+                    System.out.println("You have not subscribe");
+            }
 
+            connection.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
 }
