@@ -1,29 +1,26 @@
-import java.sql.SQLException;
-import java.util.Scanner;
+package com.company;
 
-public class Main { // the class that launches the application
+public class Main {
 
-    public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        Scanner scan = new Scanner(System.in);
-        Methods meth = new Methods();
-        System.out.println("1 - Customer\n" + "2 - User ");
-        int s = scan.nextInt();
-        switch (s) {
-            case 1:
-                System.out.println("1 - Log In\n" + "2 - Registration ");
-                int a = scan.nextInt();
-                switch (a) {
-                    case 1 -> meth.Login_Cusstomer();
-                    case 2 -> meth.add_Customer();
-                    default -> System.out.println("ERROR");
-                }
-                break;
-            case 2:
-                //checkClothes
-                System.out.println("NEXT");
-            default:
-                System.out.println("ERROR");
-        }
+    public static void main(String[] args) {
+        Factory factory = new Factory();
 
+        TShirts whiteLshirt = factory.getType("WhiteL");
+        System.out.println(whiteLshirt.ChooseTShirt());
+
+        TShirts blackMshirt = factory.getType("BlackM");
+        System.out.println(blackMshirt.ChooseTShirt());
+
+        TShirts blackSshirt = factory.getType("BlackS");
+        System.out.println(blackSshirt.ChooseTShirt());
+
+        TShirts whiteSshirt = factory.getType("WhiteS");
+        System.out.println(whiteSshirt.ChooseTShirt());
+
+        TShirts whiteMshirt = factory.getType("WhiteM");
+        System.out.println(whiteMshirt.ChooseTShirt());
+
+        TShirts blackLshirt = factory.getType("BlackL");
+        System.out.println(blackLshirt.ChooseTShirt());
     }
 }
