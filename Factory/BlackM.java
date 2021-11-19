@@ -1,4 +1,4 @@
-package com.company;
+package Factory;
 
 public class BlackM extends TShirts {
     @Override

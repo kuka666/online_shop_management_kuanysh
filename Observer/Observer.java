@@ -1,7 +1,4 @@
-package com.company.Observer;
-
-import com.company.Checker;
-import com.company.Methods;
+package Observer;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,7 +15,8 @@ public class Observer {
     public Connection connect() throws SQLException {
         return DriverManager.getConnection(url, user, password);
     }
-    public void Notify(String text){
+
+    public void Notify(String text) {
         try (Connection connection = connect()) {
             String sql = "update customer set notification = ? where isSub = true";
             PreparedStatement statement = connection.prepareStatement(sql);

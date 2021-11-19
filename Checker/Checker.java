@@ -1,3 +1,5 @@
+package Checker;
+
 public class Checker {
     public boolean checkerPassoword(String password) { // password verification
         int a = 0, b = 0, c = 0, d = 0, e = 0;

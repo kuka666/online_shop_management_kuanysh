@@ -1,6 +1,6 @@
-package com.company;
+package Factory;
 
-public class WhiteM extends TShirts{
+public class WhiteM extends TShirts {
 
     @Override
     public String ChooseTShirt() {

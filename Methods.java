@@ -8,6 +8,8 @@ import java.util.Scanner;
 
 import javax.sound.sampled.SourceDataLine;
 
+import Checker.Checker;
+
 public class Methods {
     public String url = "jdbc:postgresql://localhost:5432/Online_shop_management";
     public String user = "postgres";
@@ -34,11 +36,16 @@ public class Methods {
                 System.out.println("Settings");
                 int ch = scan.nextInt();
                 switch (ch) {
-                    case 1 -> checkNotify(rs.getInt("id"));
-                    case 2 -> System.out.println("settings");
-                    case 3 -> System.out.println("check shop collection");
-                    case 4 -> System.out.println("check cart");
-                    default -> System.out.println("ERROR");
+                case 1:
+                    checkNotify(rs.getInt("id"));
+                case 2:
+                    System.out.println("settings");
+                case 3:
+                    System.out.println("check shop collection");
+                case 4:
+                    System.out.println("check cart");
+                default:
+                    System.out.println("ERROR");
                 }
             } else {
                 System.out.println("Wrong Username & Password");
@@ -80,16 +87,16 @@ public class Methods {
             ex.printStackTrace();
         }
     }
-    
-    public void checkNotify(int ids){
+
+    public void checkNotify(int ids) {
         try (Connection connection = connect()) {
             String sql = "select notification, is_sub from customer where id =?";
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1,ids);
+            statement.setInt(1, ids);
             ResultSet rs = statement.executeQuery();
-            if(rs.next()){
-                if(rs.getBoolean("is_sub"))
-                    System.out.println("Notification: "+rs.getString("notification"));
+            if (rs.next()) {
+                if (rs.getBoolean("is_sub"))
+                    System.out.println("Notification: " + rs.getString("notification"));
                 else
                     System.out.println("You have not subscribe");
             }
@@ -99,5 +106,5 @@ public class Methods {
             ex.printStackTrace();
         }
     }
-    
+
 }
