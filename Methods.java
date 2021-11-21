@@ -24,6 +24,7 @@ public class Methods {
         try (Connection conn = connect()) {
             PreparedStatement st = (PreparedStatement) conn
                     .prepareStatement("Select id, name, email, password from customer where email=? and password=?"); // verification
+            Scanner scan = new Scanner(System.in);
             System.out.println("Write your email:");
             String log = scan.nextLine();
             System.out.println("Enter your password:");
@@ -33,22 +34,29 @@ public class Methods {
             ResultSet rs = st.executeQuery();
             if (rs.next()) { // if the data match, then the application works on
                 System.out.println("You have successfully logged in Customer: " + rs.getString("name"));
-                System.out.println("Settings");
-                int ch = scan.nextInt();
-                switch (ch) {
-                case 1:
-                    checkNotify(rs.getInt("id"));
-                case 2:
-                    System.out.println("settings");
-                case 3:
-                    System.out.println("check shop collection");
-                case 4:
-                    System.out.println("check cart");
-                default:
-                    System.out.println("ERROR");
-                }
             } else {
                 System.out.println("Wrong Username & Password");
+                System.exit(1);
+            }
+            System.out.println("Choose the number 1-5");
+            int ch = scan.nextInt();
+            switch (ch) {
+            case 1:
+                checkNotify(rs.getInt("id"));
+                break;
+            case 2:
+                System.out.println("settings");
+                settings(log, passw);
+                break;
+            case 3:
+                System.out.println("check shop collection");
+                break;
+            case 4:
+                System.out.println("check cart");
+                break;
+            default:
+                System.out.println("ERROR");
+                break;
             }
             conn.close();
         } catch (SQLException ex) {
@@ -107,4 +115,44 @@ public class Methods {
         }
     }
 
+    public void settings(String log, String passw) throws SQLException {
+        System.out.println("1-Change the password");
+        System.out.println("2-Change the subscribtion notifictaion");
+        System.out.println("3-Change the email");
+        int a = scan.nextInt();
+        if (a == 1) {
+            change_pass(log, passw);
+        } else if (a == 2) {
+            // change_subsw
+        } else if (a == 3) {
+            // change the email
+        } else {
+            System.out.println("ERROR");
+        }
+    }
+
+    public void change_pass(String log, String pass) throws SQLException { // method change pass
+        try (Connection connection = connect()) {
+            Scanner scam = new Scanner(System.in);
+            Checker check = new Checker();
+            String sql = "UPDATE  customer set password=? where email=? and password=?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            System.out.println("Enter a new password:");
+            String passw = scam.nextLine();
+            statement.setString(1, passw);
+            statement.setString(2, log);
+            statement.setString(3, pass);
+            if (check.checkerPassoword(passw)) { // check password with checker
+                int rowsInserted = statement.executeUpdate();
+                if (rowsInserted > 0) { // checking data additions to the database
+                    System.out.println("You successfully update password");
+                }
+            } else {
+                System.exit(1);
+            }
+            connection.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
 }
