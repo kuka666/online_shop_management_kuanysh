@@ -125,7 +125,7 @@ public class Methods {
         } else if (a == 2) {
             change_subs(log, passw);
         } else if (a == 3) {
-            // change the email
+            change_email(log, passw);
         } else {
             System.out.println("ERROR");
         }
@@ -171,8 +171,32 @@ public class Methods {
                 System.exit(1);
             statement.setString(2, log);
             statement.setString(3, password);
-            statement.executeUpdate();
-            System.out.println("You've successfully changed subscription mode!");
+            int rowsInserted = statement.executeUpdate();
+            if(rowsInserted > 0)
+                System.out.println("You've successfully changed subscription mode!");
+            else
+                System.exit(1);
+            connection.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    public void change_email(String log, String password) {
+        try (Connection connection = connect()) {
+            Scanner scam = new Scanner(System.in);
+            String sql = "UPDATE  customer set email=? where email=? and password=?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            System.out.println("Enter a new email: ");
+            String new_email = scam.nextLine();
+            statement.setString(1, new_email);
+            statement.setString(2, log);
+            statement.setString(3, password);
+            int rowsInserted = statement.executeUpdate();
+            if(rowsInserted > 0)
+                System.out.println("You've successfully changed email address!");
+            else
+                System.exit(1);
             connection.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
