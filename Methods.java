@@ -123,7 +123,7 @@ public class Methods {
         if (a == 1) {
             change_pass(log, passw);
         } else if (a == 2) {
-            // change_subsw
+            change_subs(log, passw);
         } else if (a == 3) {
             // change the email
         } else {
@@ -150,6 +150,29 @@ public class Methods {
             } else {
                 System.exit(1);
             }
+            connection.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    public void change_subs(String log, String password){
+        try (Connection connection = connect()) {
+            Scanner scam = new Scanner(System.in);
+            String sql = "UPDATE  customer set is_sub=? where email=? and password=?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            System.out.println("1)Subscribe\n2)Unsubscribe");
+            int sub_type = scam.nextInt();
+            if(sub_type==1)
+                statement.setBoolean(1, true);
+            else if(sub_type==2)
+                statement.setBoolean(1, false);
+            else
+                System.exit(1);
+            statement.setString(2, log);
+            statement.setString(3, password);
+            statement.executeUpdate();
+            System.out.println("You've successfully changed subscription mode!");
             connection.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
