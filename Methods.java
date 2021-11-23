@@ -95,6 +95,31 @@ public class Methods {
             ex.printStackTrace();
         }
     }
+    
+    public void addItem() throws SQLException {
+        try (Connection connection = connect()) {
+            String sql = "insert into tshirt (name,type,price,description) " +
+                    "VALUES (?, ?, ?,?)";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            System.out.println("Write item's name:");
+            statement.setString(1, scan.nextLine());
+            System.out.println("Write item's type:");
+            statement.setString(2, scan.nextLine());
+            System.out.println("Write item's price:");
+            statement.setString(3, scan.nextLine());
+            System.out.println("Write item's description:");
+            statement.setString(4, scan.nextLine());
+            int rowsInserted = statement.executeUpdate();
+            if (rowsInserted > 0) { // checking data additions to the database
+                System.out.println("You have successfully registered the new item");
+            } else {
+                System.exit(1);
+            }
+            connection.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
 
     public void checkNotify(int ids) {
         try (Connection connection = connect()) {
