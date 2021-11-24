@@ -6,7 +6,6 @@ public class Main {
         Factory factory = new Factory();
         FactoryMethodJeans factoryjeans = new FactoryMethodJeans();
 
-
         TShirts whiteLshirt = factory.getType("WhiteL");
         System.out.println(whiteLshirt.ChooseTShirt());
 
@@ -24,7 +23,7 @@ public class Main {
 
         TShirts blackLshirt = factory.getType("BlackL");
         System.out.println(blackLshirt.ChooseTShirt());
-        
+
         Jeans blueSjeans = factoryjeans.getType("BlueSJeans");
         System.out.println(blueSjeans.ChooseJeans());
 
