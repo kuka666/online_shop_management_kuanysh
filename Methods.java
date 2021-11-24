@@ -38,7 +38,7 @@ public class Methods {
                 System.out.println("Wrong Username & Password");
                 System.exit(1);
             }
-            System.out.println("Choose the number 1-5");
+            System.out.println("Choose the number 1-5:");
             System.out.println("1-Check Notify");
             System.out.println("2-Change the settings");
             System.out.println("3-check shop collection");
