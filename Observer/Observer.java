@@ -18,7 +18,7 @@ public class Observer {
 
     public void Notify(String text) {
         try (Connection connection = connect()) {
-            String sql = "update customer set notification = ? where isSub = true";
+            String sql = "update customer set notification = ? where is_sub = true";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, text);
             statement.executeUpdate();

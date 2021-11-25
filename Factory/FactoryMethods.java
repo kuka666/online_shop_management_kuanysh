@@ -16,9 +16,9 @@ import Strategy.PayPal;
 import Strategy.Payment;
 
 public class FactoryMethods {
-    public String url = "jdbc:postgresql://localhost:5432/Online_shop_management";
+    public String url = "jdbc:postgresql://localhost:5432/postgres";
     public String user = "postgres";
-    public String password = "dbhec123";
+    public String password = "1234";
     Scanner scan = new Scanner(System.in);
     int cost;
 
@@ -28,13 +28,19 @@ public class FactoryMethods {
 
     public void addJeansBlackM() throws SQLException {
         try (Connection connection = connect()) {
-            String sql = "insert into item (type,price,description) VALUES ('Jeans', '20', 'M size, Black')";
-            FactoryMethodJeans factoryjeans = new FactoryMethodJeans();
-            Jeans blackMjeans = factoryjeans.getType("BlackMJeans");
-            System.out.println(blackMjeans.ChooseJeans());
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.executeUpdate();
-            connection.close();
+            String sql1 = "select max(item_id) as last from item";
+            PreparedStatement st = connection.prepareStatement(sql1);
+            ResultSet rs = st.executeQuery();
+            if(rs.next()) {
+                String sql = "insert into item (item_id,type,price,description) VALUES (?,'Jeans', '20', 'M size, Black')";
+                FactoryMethodJeans factoryjeans = new FactoryMethodJeans();
+                Jeans blackMjeans = factoryjeans.getType("BlackMJeans");
+                System.out.println(blackMjeans.ChooseJeans());
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setInt(1,rs.getInt("last")+1);
+                statement.executeUpdate();
+                connection.close();
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }

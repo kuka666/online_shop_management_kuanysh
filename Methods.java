@@ -9,10 +9,8 @@ import Decorator.AllContent;
 import Decorator.Bill;
 import Decorator.BrandedPackages;
 import Decorator.Delivery;
-import Factory.Factory;
-import Factory.FactoryMethod;
-import Factory.FactoryMethodJeans;
 import Factory.FactoryMethods;
+import Observer.Observer;
 import Strategy.CreditCard;
 import Strategy.PayPal;
 import Strategy.Payment;
@@ -22,9 +20,9 @@ public class Methods {
         System.out.println("Order: " + bill.getDescription() + ". Cost: " + bill.cost());
     }
 
-    public String url = "jdbc:postgresql://localhost:5432/Online_shop_management";
+    public String url = "jdbc:postgresql://localhost:5432/postgres";
     public String user = "postgres";
-    public String password = "dbhec123";
+    public String password = "1234";
     Scanner scan = new Scanner(System.in);
     int cost;
 
@@ -35,7 +33,7 @@ public class Methods {
     public void Login_Cusstomer() throws SQLException {
         try (Connection conn = connect()) {
             PreparedStatement st = (PreparedStatement) conn
-                    .prepareStatement("Select id, name, email, password from customer where email=? and password=?"); // verification
+                    .prepareStatement("Select * from customer where email=? and password=?"); // verification
             Scanner scan = new Scanner(System.in);
             System.out.println("Write your email:");
             String log = scan.nextLine();
@@ -44,17 +42,33 @@ public class Methods {
             st.setString(1, log);
             st.setString(2, passw);
             ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                if(rs.getBoolean("admin")) {
+                    admin_login();
+                    System.exit(1);
+                }
+            }
             if (rs.next()) { // if the data match, then the application works on
                 System.out.println("You have successfully logged in Customer: " + rs.getString("name"));
-            } else if (rs.getBoolean("admin")) {
-                System.out.println("You have successfully logged as Admin");
-                FactoryMethods clothes = new FactoryMethods();
-                clothes.factory_print();
             } else {
                 System.out.println("Wrong Username & Password");
                 System.exit(1);
             }
             menu(rs.getInt("id"), log, passw);
+            conn.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void admin_login(){
+        try (Connection conn = connect()) {
+            System.out.println("You have successfully logged as Admin");
+            FactoryMethods clothes = new FactoryMethods();
+            Observer observer = new Observer();
+            clothes.factory_print();
+            System.out.println("Write notifications for customers: ");
+            observer.Notify(scan.nextLine());
             conn.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
