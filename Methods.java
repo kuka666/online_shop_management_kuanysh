@@ -3,14 +3,24 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Scanner;
 import Checker.Checker;
+import Decorator.AllContent;
+import Decorator.Bill;
+import Decorator.BrandedPackages;
+import Decorator.Delivery;
+import Strategy.CreditCard;
+import Strategy.PayPal;
+import Strategy.Payment;
+
 
 public class Methods {
-    public String url = "jdbc:postgresql://localhost:5432/Online_shop_management";
+    static void printCheck(Bill bill) throws SQLException {
+        System.out.println("Order: " + bill.getDescription() + ". Cost: " + bill.cost());
+    }
+    public String url = "jdbc:postgresql://localhost:5432/postgres";
     public String user = "postgres";
-    public String password = "dbhec123";
+    public String password = "1234";
     Scanner scan = new Scanner(System.in);
     int cost;
 
@@ -36,6 +46,15 @@ public class Methods {
                 System.out.println("Wrong Username & Password");
                 System.exit(1);
             }
+            menu(rs.getInt("id"), log, passw);
+            conn.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void menu(int id, String log, String passw){
+        try (Connection conn = connect()) {
             System.out.println("Choose the number 1-5:");
             System.out.println("1-Check Notify");
             System.out.println("2-Change the settings");
@@ -44,23 +63,21 @@ public class Methods {
             System.out.println("5-Exit");
             int ch = scan.nextInt();
             switch (ch) {
-            case 1:
-                checkNotify(rs.getInt("id"));
-                break;
-            case 2:
-                System.out.println("settings");
-                settings(log, passw);
-                break;
-            case 3:
-                System.out.println("check shop collection");
-                // shop_collection
-                break;
-            case 4:
-                System.out.println("check cart");
-                break;
-            default:
-                System.exit(1);
-                break;
+                case 1:
+                    checkNotify(id);
+                    break;
+                case 2:
+                    settings(id, log, passw);
+                    break;
+                case 3:
+                    check_shop_collection(id, log, passw);
+                    break;
+                case 4:
+                    check_cart(id, log, passw);
+                    break;
+                default:
+                    System.exit(1);
+                    break;
             }
             conn.close();
         } catch (SQLException ex) {
@@ -68,7 +85,7 @@ public class Methods {
         }
     }
 
-    public void check_shop_collection() throws SQLException {
+    public void check_shop_collection(int id, String log, String passw) throws SQLException {
         try (Connection connection = connect()) {
             String sql = "select item_id,type,description,price from item";
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -77,6 +94,8 @@ public class Methods {
                 System.out.println("ID:" + rs.getInt("item_id") + " " + rs.getString("type") + " Price: "
                         + rs.getFloat("price") + "$ Description: " + rs.getString("description"));
             }
+            System.out.println("If you want to buy write ID");
+            add_to_cart(scan.nextInt(), id, log, passw);
             connection.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -85,9 +104,10 @@ public class Methods {
 
     public void add_Customer() throws SQLException { // method that add new users into database
         try (Connection connection = connect()) {
-            String sql = "insert into customer (name,email,phone,password) " + // inserting in sql
-                    "VALUES (?, ?, ?,?)";
+            String sql = "insert into customer (name,email,phone,password, is_sub) " + // inserting in sql
+                    "VALUES (?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setBoolean(5, true);
             System.out.println("Write your name:");
             statement.setString(1, scan.nextLine()); // adding username in 1 column
             System.out.println("Write your email:");
@@ -115,14 +135,15 @@ public class Methods {
             st.setString(2, pq);
             ResultSet rs = st.executeQuery();
             if (rs.next()) { // if the data match, then the application works on
-                String sql2 = "insert into cart (customer_id,price,descrtiption) " + "VALUES (?,?,?)";
+                String sql2 = "insert into cart (customer_id, description, price) " + "VALUES (?,?,?)";
                 PreparedStatement statement1 = connection.prepareStatement(sql2);
                 statement1.setInt(1, rs.getInt("id"));
-                statement1.setInt(2, 0);
-                statement1.setString(2, " ");
+                statement1.setString(2," ");
+                statement1.setInt(3, 0);
                 statement1.executeUpdate();
                 connection.close();
             }
+            Login_Cusstomer();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -130,7 +151,7 @@ public class Methods {
 
     public void checkNotify(int ids) {
         try (Connection connection = connect()) {
-            String sql = "select notification, is_sub from customer where id =?";
+            String sql = "select*from customer where id =?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, ids);
             ResultSet rs = statement.executeQuery();
@@ -140,54 +161,55 @@ public class Methods {
                 else
                     System.out.println("You have not subscribe");
             }
-
+            menu(ids, rs.getString("email"), rs.getString("password"));
             connection.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
 
-    public void settings(String log, String passw) throws SQLException {
+    public void settings(int id, String log, String passw) throws SQLException {
         System.out.println("1-Change the password");
         System.out.println("2-Change the subscribtion notifictaion");
         System.out.println("3-Change the email");
+        System.out.println("4-Exit");
         int a = scan.nextInt();
         if (a == 1) {
-            change_pass(log, passw);
+            change_pass(id, log, passw);
         } else if (a == 2) {
-            change_subs(log, password);
+            change_subs(id, log, passw);
         } else if (a == 3) {
-            change_email(log, password);
+            change_email(id, log, passw);
+        } else if (a == 4) {
+            menu(id, log, passw);
         } else {
-            System.out.println("ERROR");
+            settings(id, log, passw);
         }
     }
 
-    public void check_cart(int id) {
+    public void check_cart(int id, String log, String passw) {
         try(Connection connection = connect()) {
             String sql = "select * from cart where customer_id = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, id);
             ResultSet rs = statement.executeQuery();
             while (rs.next()){
-                System.out.println(rs.getString("type")
-                        + " Price: " + rs.getFloat("price") + " Description: " + rs.getString("desc"));
+                System.out.println("Price: " + rs.getFloat("price") + " Description: " + rs.getString("description"));
             }
-            System.out.println("Choose action(1-4):");
-            System.out.println("Make purchase");
-            System.out.println("Add product");
-            System.out.println("Remove product");
-            System.out.println("Exit");
+            System.out.println("Choose action(1-3):");
+            System.out.println("1-Add product");
+            System.out.println("2-Remove product");
+            System.out.println("3-Exit");
             int ch = scan.nextInt();
             switch (ch){
                 case 1:
-                    //ыв/а;
+                    check_shop_collection(id, log, passw);
                     break;
                 case 2:
-                    //add
+                    remove_cart(id);
                     break;
                 case 3:
-                    //remove
+                    menu(id, log, passw);
                     break;
                 default:
                     System.exit(1);
@@ -197,7 +219,7 @@ public class Methods {
         }
     }
 
-    public void change_pass(String log, String pass) throws SQLException { // method change pass
+    public void change_pass(int id, String log, String pass) throws SQLException { // method change pass
         try (Connection connection = connect()) {
             Scanner scam = new Scanner(System.in);
             Checker check = new Checker();
@@ -216,13 +238,14 @@ public class Methods {
             } else {
                 System.exit(1);
             }
+            menu(id, log, passw);
             connection.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
 
-    public void change_subs(String log, String password) {
+    public void change_subs(int id, String log, String password) {
         try (Connection connection = connect()) {
             Scanner scam = new Scanner(System.in);
             String sql = "UPDATE  customer set is_sub=? where email=? and password=?";
@@ -242,13 +265,14 @@ public class Methods {
                 System.out.println("You've successfully changed subscription mode!");
             else
                 System.exit(1);
+            menu(id, log, password);
             connection.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
 
-    public void change_email(String log, String password) {
+    public void change_email(int id, String log, String password) {
         try (Connection connection = connect()) {
             Scanner scam = new Scanner(System.in);
             String sql = "UPDATE  customer set email=? where email=? and password=?";
@@ -263,15 +287,16 @@ public class Methods {
                 System.out.println("You've successfully changed email address!");
             else
                 System.exit(1);
+            menu(id, new_email, password);
             connection.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
 
-    public void add_to_cart(int ID, int cus_id) throws SQLException {
+    public void add_to_cart(int ID, int cus_id, String log, String passw) throws SQLException {
         try (Connection connection = connect()) {
-            PreparedStatement st = (PreparedStatement) connection.prepareStatement("select*from item where item_id=? "); // verification
+            PreparedStatement st = connection.prepareStatement("select*from item where item_id=? "); // verification
             st.setInt(1, ID);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
@@ -284,7 +309,7 @@ public class Methods {
                     int price = rs1.getInt("price") + rs.getInt("price");
                     String all = rs.getString("type") + " " + rs.getString("description") + " "
                             + rs1.getString("description");
-                    String sql2 = "UPDATE  cart set price=?,description=? where customer_id=?";
+                    String sql2 = "UPDATE  cart set price=?, description=? where customer_id=?";
                     PreparedStatement statement1 = connection.prepareStatement(sql2);
                     statement1.setFloat(1, price);
                     statement1.setString(2, all);
@@ -293,6 +318,62 @@ public class Methods {
                 }
             }
             System.out.println("You r add to cart");
+            System.out.println("1-Buy\n2-Repeat\n3-Check cart");
+            int d = scan.nextInt();
+            if(d == 1){
+                System.out.println("1-Only delivery");
+                System.out.println("2-Branded packages and delivery");
+                System.out.println("3-Exit");
+                int c = scan.nextInt();
+
+                switch (c){
+                    case 1:
+                        Bill AllContent = new AllContent(cus_id);
+                        Delivery delivery = new Delivery(AllContent);
+                        System.out.println("-------------------------");
+                        printCheck(delivery);
+                        System.out.println("-------------------------");
+                        System.out.println("1-Credit card\n2-PayPal");
+                        int a = scan.nextInt();
+                        CreditCard card = new CreditCard();
+                        PayPal payPal = new PayPal();
+                        if(a == 1){
+                            Payment payment = new Payment(card);
+                            payment.pay();
+                        } else if(a == 2){
+                            Payment payment = new Payment(payPal);
+                            payment.pay();
+                        }
+                        remove_cart(cus_id);
+                        break;
+                    case 2:
+                        Bill AllContent1 = new AllContent(cus_id);
+                        Delivery alless = new Delivery(new BrandedPackages(AllContent1));
+                        System.out.println("-------------------------");
+                        printCheck(alless);
+                        System.out.println("-------------------------");
+                        System.out.println("1-Credit card\n2-PayPal");
+                        int b = scan.nextInt();
+                        CreditCard card1 = new CreditCard();
+                        PayPal payPal1 = new PayPal();
+                        if(b == 1){
+                            Payment payment = new Payment(card1);
+                            payment.pay();
+                        } else if(b == 2){
+                            Payment payment = new Payment(payPal1);
+                            payment.pay();
+                        }
+                        remove_cart(cus_id);
+                        break;
+                    case 3:
+                        menu(cus_id, log, passw);
+                        break;
+                }
+            } else if(d == 2){
+                check_shop_collection(cus_id,log,passw);
+            } else if(d == 3){
+                check_cart(cus_id,log,passw);
+            }
 
             connection.close();
         } catch (SQLException ex) {
@@ -300,4 +381,21 @@ public class Methods {
         }
     }
 
+    public void remove_cart(int cus_id) {
+        try (Connection connection = connect()) {
+            String sql = "UPDATE  cart set price=?,description=? where customer_id=?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, 0);
+            statement.setString(2, " ");
+            statement.setInt(3, cus_id);
+            int rowsInserted = statement.executeUpdate();
+            if (rowsInserted > 0)
+                System.out.println("GOOD BYE!");
+            else
+                System.exit(1);
+            connection.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
 }

@@ -11,9 +11,9 @@ public class AllContent extends Bill {
     String desc;
     int price;
     int cost;
-    public String url = "jdbc:postgresql://localhost:5432/Online_shop_management";
+    public String url = "jdbc:postgresql://localhost:5432/postgres";
     public String user = "postgres";
-    public String password = "dbhec123";
+    public String password = "1234";
 
     public Connection connect() throws SQLException {
         return DriverManager.getConnection(url, user, password);
