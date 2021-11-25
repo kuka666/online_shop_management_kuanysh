@@ -38,6 +38,7 @@ public class Checker {
         int a = 0;
         if (number.length() != 16) { // card number can only have 16 characters
             System.out.println("Not enough number");
+            System.exit(1);
             return false;
         }
 
@@ -50,6 +51,7 @@ public class Checker {
             return true;
         } else {
             System.out.println("Invalid number");
+            System.exit(1);
             return false;
         }
     }
@@ -58,6 +60,7 @@ public class Checker {
         int a = 0, b = 0, c = 0;
         if (number.length() != 5) { // format of the card date mm/уу, so it cannot contain more than 5 characters
             System.out.println("Not enough number");
+            System.exit(1);
             return false;
         }
 
@@ -70,12 +73,14 @@ public class Checker {
 
         if (number.charAt(2) != '/') { // the third character must be "/"
             System.out.println("invalid date");
+            System.exit(1);
             return false;
         }
         if (a > 0) { // if variables а are greater than 0, then the card date was correct
             return true;
         } else {
             System.out.println("Invalid number");
+            System.exit(1);
             return false;
         }
     }
@@ -83,12 +88,13 @@ public class Checker {
     public boolean checkCVV(String number) { // сvv verification
         if (number.length() != 3) { // сvv can only have 3 characters
             System.out.println("Not enough number");
+            System.exit(1);
             return false;
         }
         for (int i = 0; i < number.length(); i++) {
             if (number.charAt(i) <= 48 && number.charAt(i) >= 57) { // сvv consists only of numbers
+                System.exit(1);
                 return false;
-
             }
         }
         return true;
