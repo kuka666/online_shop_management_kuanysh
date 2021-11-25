@@ -2,7 +2,7 @@ package Checker;
 
 public class Checker {
     public boolean checkerPassoword(String password) { // password verification
-        int a = 0, b = 0, c = 0, d = 0, e = 0;
+        int a = 0, b = 0, d = 0, e = 0;
         if (password.length() < 8) { // the password must be at least 8 characters long
             System.out.println("Invalid password");
             return false;

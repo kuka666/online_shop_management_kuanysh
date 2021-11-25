@@ -84,24 +84,6 @@ public class Methods {
             ex.printStackTrace();
         }
     }
-    // public void add_to_cart() throws SQLException{
-    // try(Connection connection=connect()){
-    // String sql = "select*from cart where customer_id=?";
-    // PreparedStatement statement = connection.prepareStatement(sql);
-    // statement.setInt(1, ids);
-    // ResultSet rs = statement.executeQuery();
-    // if (rs.next()) {
-    // if (rs.getBoolean("is_sub"))
-    // System.out.println("Notification: " + rs.getString("notification"));
-    // else
-    // System.out.println("You have not subscribe");
-    // }
-
-    // if()
-    // }catch(SQLException ex){
-    // ex.printStackTrace();
-    // }
-    // }
 
     public void add_Customer() throws SQLException { // method that add new users into database
         try (Connection connection = connect()) {
@@ -135,9 +117,11 @@ public class Methods {
             st.setString(2, pq);
             ResultSet rs = st.executeQuery();
             if (rs.next()) { // if the data match, then the application works on
-                String sql2 = "insert into cart (customer_id) " + "VALUES (?)";
+                String sql2 = "insert into cart (customer_id,price,descrtiption) " + "VALUES (?,?,?)";
                 PreparedStatement statement1 = connection.prepareStatement(sql2);
                 statement1.setInt(1, rs.getInt("id"));
+                statement1.setInt(2, 0);
+                statement1.setString(2, " ");
                 statement1.executeUpdate();
                 connection.close();
             }
@@ -145,75 +129,6 @@ public class Methods {
             ex.printStackTrace();
         }
     }
-    
-        public void check_cart(int id) {
-        try(Connection connection = connect()) {
-            String sql = "select * from cart where customer_id = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, id);
-            ResultSet rs = statement.executeQuery();
-            while (rs.next()){
-                System.out.println(rs.getString("type")
-                        + " Price: " + rs.getFloat("price") + " Description: " + rs.getString("desc"));
-            }
-            System.out.println("Choose action(1-4):");
-            System.out.println("Make purchase");
-            System.out.println("Add product");
-            System.out.println("Remove product");
-            System.out.println("Exit");
-            int ch = scan.nextInt();
-            switch (ch){
-                case 1:
-                    purchase(id);
-                    break;
-                case 2:
-                    //add
-                    break;
-                case 3:
-                    //remove
-                    break;
-                default:
-                    System.exit(1);
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public void purchase(int id){
-        try(Connection connection = connect()) {
-            String sql = "select sum(price) as total from cart where customer_id = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1,id);
-            ResultSet rs = statement.executeQuery();
-            if(rs.next())
-                System.out.println("Total price: " + rs.getFloat("total"));
-            System.out.println("(1)buy\n(2)cancel:");
-            int ch = scan.nextInt();
-            switch (ch){
-                case 1:
-                    String sql1 = "delete from cart where customer_id = ?";
-                    statement = connection.prepareStatement(sql1);
-                    statement.setInt(1, id);
-                    int rs1 = statement.executeUpdate();
-                    String sql2 = "insert into cart (customer_id) values(?)";
-                    statement = connection.prepareStatement(sql2);
-                    statement.setInt(1, id);
-                    int rowsInserted = statement.executeUpdate();
-                    if (rowsInserted > 0) { // checking data additions to the database
-                        System.out.print("Successful order!!!");
-                    }
-                    break;
-                case 2:
-                    check_cart(id);
-                default:
-                    System.exit(1);
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-
 
     public void checkNotify(int ids) {
         try (Connection connection = connect()) {
@@ -316,6 +231,37 @@ public class Methods {
                 System.out.println("You've successfully changed email address!");
             else
                 System.exit(1);
+            connection.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void add_to_cart(int ID, int cus_id) throws SQLException {
+        try (Connection connection = connect()) {
+            PreparedStatement st = (PreparedStatement) connection.prepareStatement("select*from item where item_id=? "); // verification
+            st.setInt(1, ID);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                System.out.println(rs.getString("description") + " " + rs.getInt("price"));
+                PreparedStatement statement = (PreparedStatement) connection
+                        .prepareStatement("select*from cart where customer_id=? ");
+                statement.setInt(1, cus_id);
+                ResultSet rs1 = statement.executeQuery();
+                if (rs1.next()) {
+                    int price = rs1.getInt("price") + rs.getInt("price");
+                    String all = rs.getString("type") + " " + rs.getString("description") + " "
+                            + rs1.getString("description");
+                    String sql2 = "UPDATE  cart set price=?,description=? where customer_id=?";
+                    PreparedStatement statement1 = connection.prepareStatement(sql2);
+                    statement1.setFloat(1, price);
+                    statement1.setString(2, all);
+                    statement1.setInt(3, cus_id);
+                    statement1.executeUpdate();
+                }
+            }
+            System.out.println("You r add to cart");
+
             connection.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
