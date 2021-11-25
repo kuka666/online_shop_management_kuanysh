@@ -42,6 +42,9 @@ public class Methods {
             ResultSet rs = st.executeQuery();
             if (rs.next()) { // if the data match, then the application works on
                 System.out.println("You have successfully logged in Customer: " + rs.getString("name"));
+            } else if(rs.getBoolean("admin")){
+                System.out.println("You have successfully logged as Admin");
+                //add_product
             } else {
                 System.out.println("Wrong Username & Password");
                 System.exit(1);

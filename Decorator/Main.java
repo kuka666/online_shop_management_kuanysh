@@ -14,13 +14,13 @@ public class Main {
         printCoffee(cappwithMilk);
         System.out.println("-------------------------");
 
-        // BrandedPackages cappwithMilkandChoc = new BrandedPackages(cappwithMilk);
-        // printCoffee(cappwithMilkandChoc);
-        // System.out.println("-------------------------");
+         BrandedPackages cappwithMilkandChoc = new BrandedPackages(cappwithMilk);
+         printCoffee(cappwithMilkandChoc);
+         System.out.println("-------------------------");
 
-        // Delivery alless = new Delivery(new BrandedPackages(AllContent));
-        // printCoffee(alless);
-        // System.out.println("-------------------------");
+         Delivery alless = new Delivery(new BrandedPackages(AllContent));
+         printCoffee(alless);
+         System.out.println("-------------------------");
 
     }
 }
