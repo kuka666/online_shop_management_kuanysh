@@ -7,5 +7,42 @@ public class Main { // the class that launches the application
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         Scanner scan = new Scanner(System.in);
         Methods meth = new Methods();
+<<<<<<< HEAD
+=======
+        System.out.println("1 - Customer\n" + "2 - User ");
+        int s = scan.nextInt();
+        meth.check_shop_collection();
+        meth.add_Customer();
+        // if (s == 1) {
+        // System.out.println("1 - Log In\n" + "2 - Registration ");
+        // int a = scan.nextInt();
+        // if (a == 1) {
+        // meth.Login_Cusstomer();
+        // } else if (a == 2) {
+        // meth.add_Customer();
+        // } else {
+        // switch (s) {
+        // case 1:
+        // System.out.println("1 - Log In\n" + "2 - Registration ");
+        // a = scan.nextInt();
+        // switch (a) {
+        // case 1:
+        // meth.Login_Cusstomer();
+        // case 2:
+        // meth.add_Customer();
+        // default:
+        // System.out.println("ERROR");
+        // }
+        // break;
+        // case 2:
+        // // checkClothes
+        // System.out.println("NEXT");
+        // default:
+        // System.out.println("ERROR");
+        // }
+        // }
+
+        // }
+>>>>>>> 50caf2cd850f1757c8b6d2d8c2d01822718089d8
     }
 }

@@ -5,9 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
-
-import javax.sound.sampled.SourceDataLine;
-
 import Checker.Checker;
 
 public class Methods {
@@ -163,6 +160,40 @@ public class Methods {
             change_email(log, password);
         } else {
             System.out.println("ERROR");
+        }
+    }
+
+    public void check_cart(int id) {
+        try(Connection connection = connect()) {
+            String sql = "select * from cart where customer_id = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()){
+                System.out.println(rs.getString("type")
+                        + " Price: " + rs.getFloat("price") + " Description: " + rs.getString("desc"));
+            }
+            System.out.println("Choose action(1-4):");
+            System.out.println("Make purchase");
+            System.out.println("Add product");
+            System.out.println("Remove product");
+            System.out.println("Exit");
+            int ch = scan.nextInt();
+            switch (ch){
+                case 1:
+                    //ыв/а;
+                    break;
+                case 2:
+                    //add
+                    break;
+                case 3:
+                    //remove
+                    break;
+                default:
+                    System.exit(1);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
     }
 
