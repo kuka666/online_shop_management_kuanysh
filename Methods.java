@@ -9,18 +9,22 @@ import Decorator.AllContent;
 import Decorator.Bill;
 import Decorator.BrandedPackages;
 import Decorator.Delivery;
+import Factory.Factory;
+import Factory.FactoryMethod;
+import Factory.FactoryMethodJeans;
+import Factory.FactoryMethods;
 import Strategy.CreditCard;
 import Strategy.PayPal;
 import Strategy.Payment;
-
 
 public class Methods {
     static void printCheck(Bill bill) throws SQLException {
         System.out.println("Order: " + bill.getDescription() + ". Cost: " + bill.cost());
     }
-    public String url = "jdbc:postgresql://localhost:5432/postgres";
+
+    public String url = "jdbc:postgresql://localhost:5432/Online_shop_management";
     public String user = "postgres";
-    public String password = "1234";
+    public String password = "dbhec123";
     Scanner scan = new Scanner(System.in);
     int cost;
 
@@ -42,9 +46,10 @@ public class Methods {
             ResultSet rs = st.executeQuery();
             if (rs.next()) { // if the data match, then the application works on
                 System.out.println("You have successfully logged in Customer: " + rs.getString("name"));
-            } else if(rs.getBoolean("admin")){
+            } else if (rs.getBoolean("admin")) {
                 System.out.println("You have successfully logged as Admin");
-                //add_product
+                FactoryMethods clothes = new FactoryMethods();
+                clothes.factory_print();
             } else {
                 System.out.println("Wrong Username & Password");
                 System.exit(1);
@@ -56,7 +61,7 @@ public class Methods {
         }
     }
 
-    public void menu(int id, String log, String passw){
+    public void menu(int id, String log, String passw) {
         try (Connection conn = connect()) {
             System.out.println("Choose the number 1-5:");
             System.out.println("1-Check Notify");
@@ -66,21 +71,21 @@ public class Methods {
             System.out.println("5-Exit");
             int ch = scan.nextInt();
             switch (ch) {
-                case 1:
-                    checkNotify(id);
-                    break;
-                case 2:
-                    settings(id, log, passw);
-                    break;
-                case 3:
-                    check_shop_collection(id, log, passw);
-                    break;
-                case 4:
-                    check_cart(id, log, passw);
-                    break;
-                default:
-                    System.exit(1);
-                    break;
+            case 1:
+                checkNotify(id);
+                break;
+            case 2:
+                settings(id, log, passw);
+                break;
+            case 3:
+                check_shop_collection(id, log, passw);
+                break;
+            case 4:
+                check_cart(id, log, passw);
+                break;
+            default:
+                System.exit(1);
+                break;
             }
             conn.close();
         } catch (SQLException ex) {
@@ -141,7 +146,7 @@ public class Methods {
                 String sql2 = "insert into cart (customer_id, description, price) " + "VALUES (?,?,?)";
                 PreparedStatement statement1 = connection.prepareStatement(sql2);
                 statement1.setInt(1, rs.getInt("id"));
-                statement1.setString(2," ");
+                statement1.setString(2, " ");
                 statement1.setInt(3, 0);
                 statement1.executeUpdate();
                 connection.close();
@@ -191,12 +196,12 @@ public class Methods {
     }
 
     public void check_cart(int id, String log, String passw) {
-        try(Connection connection = connect()) {
+        try (Connection connection = connect()) {
             String sql = "select * from cart where customer_id = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, id);
             ResultSet rs = statement.executeQuery();
-            while (rs.next()){
+            while (rs.next()) {
                 System.out.println("Price: " + rs.getFloat("price") + " Description: " + rs.getString("description"));
             }
             System.out.println("Choose action(1-3):");
@@ -204,18 +209,18 @@ public class Methods {
             System.out.println("2-Remove product");
             System.out.println("3-Exit");
             int ch = scan.nextInt();
-            switch (ch){
-                case 1:
-                    check_shop_collection(id, log, passw);
-                    break;
-                case 2:
-                    remove_cart(id);
-                    break;
-                case 3:
-                    menu(id, log, passw);
-                    break;
-                default:
-                    System.exit(1);
+            switch (ch) {
+            case 1:
+                check_shop_collection(id, log, passw);
+                break;
+            case 2:
+                remove_cart(id);
+                break;
+            case 3:
+                menu(id, log, passw);
+                break;
+            default:
+                System.exit(1);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -323,59 +328,59 @@ public class Methods {
             System.out.println("You r add to cart");
             System.out.println("1-Buy\n2-Repeat\n3-Check cart");
             int d = scan.nextInt();
-            if(d == 1){
+            if (d == 1) {
                 System.out.println("1-Only delivery");
                 System.out.println("2-Branded packages and delivery");
                 System.out.println("3-Exit");
                 int c = scan.nextInt();
 
-                switch (c){
-                    case 1:
-                        Bill AllContent = new AllContent(cus_id);
-                        Delivery delivery = new Delivery(AllContent);
-                        System.out.println("-------------------------");
-                        printCheck(delivery);
-                        System.out.println("-------------------------");
-                        System.out.println("1-Credit card\n2-PayPal");
-                        int a = scan.nextInt();
-                        CreditCard card = new CreditCard();
-                        PayPal payPal = new PayPal();
-                        if(a == 1){
-                            Payment payment = new Payment(card);
-                            payment.pay();
-                        } else if(a == 2){
-                            Payment payment = new Payment(payPal);
-                            payment.pay();
-                        }
-                        remove_cart(cus_id);
-                        break;
-                    case 2:
-                        Bill AllContent1 = new AllContent(cus_id);
-                        Delivery alless = new Delivery(new BrandedPackages(AllContent1));
-                        System.out.println("-------------------------");
-                        printCheck(alless);
-                        System.out.println("-------------------------");
-                        System.out.println("1-Credit card\n2-PayPal");
-                        int b = scan.nextInt();
-                        CreditCard card1 = new CreditCard();
-                        PayPal payPal1 = new PayPal();
-                        if(b == 1){
-                            Payment payment = new Payment(card1);
-                            payment.pay();
-                        } else if(b == 2){
-                            Payment payment = new Payment(payPal1);
-                            payment.pay();
-                        }
-                        remove_cart(cus_id);
-                        break;
-                    case 3:
-                        menu(cus_id, log, passw);
-                        break;
+                switch (c) {
+                case 1:
+                    Bill AllContent = new AllContent(cus_id);
+                    Delivery delivery = new Delivery(AllContent);
+                    System.out.println("-------------------------");
+                    printCheck(delivery);
+                    System.out.println("-------------------------");
+                    System.out.println("1-Credit card\n2-PayPal");
+                    int a = scan.nextInt();
+                    CreditCard card = new CreditCard();
+                    PayPal payPal = new PayPal();
+                    if (a == 1) {
+                        Payment payment = new Payment(card);
+                        payment.pay();
+                    } else if (a == 2) {
+                        Payment payment = new Payment(payPal);
+                        payment.pay();
+                    }
+                    remove_cart(cus_id);
+                    break;
+                case 2:
+                    Bill AllContent1 = new AllContent(cus_id);
+                    Delivery alless = new Delivery(new BrandedPackages(AllContent1));
+                    System.out.println("-------------------------");
+                    printCheck(alless);
+                    System.out.println("-------------------------");
+                    System.out.println("1-Credit card\n2-PayPal");
+                    int b = scan.nextInt();
+                    CreditCard card1 = new CreditCard();
+                    PayPal payPal1 = new PayPal();
+                    if (b == 1) {
+                        Payment payment = new Payment(card1);
+                        payment.pay();
+                    } else if (b == 2) {
+                        Payment payment = new Payment(payPal1);
+                        payment.pay();
+                    }
+                    remove_cart(cus_id);
+                    break;
+                case 3:
+                    menu(cus_id, log, passw);
+                    break;
                 }
-            } else if(d == 2){
-                check_shop_collection(cus_id,log,passw);
-            } else if(d == 3){
-                check_cart(cus_id,log,passw);
+            } else if (d == 2) {
+                check_shop_collection(cus_id, log, passw);
+            } else if (d == 3) {
+                check_cart(cus_id, log, passw);
             }
 
             connection.close();
@@ -401,4 +406,5 @@ public class Methods {
             ex.printStackTrace();
         }
     }
+
 }
