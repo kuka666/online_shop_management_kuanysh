@@ -15,6 +15,7 @@ public class Methods {
     public String user = "postgres";
     public String password = "dbhec123";
     Scanner scan = new Scanner(System.in);
+    int cost;
 
     public Connection connect() throws SQLException {
         return DriverManager.getConnection(url, user, password);
@@ -267,4 +268,5 @@ public class Methods {
             ex.printStackTrace();
         }
     }
+
 }

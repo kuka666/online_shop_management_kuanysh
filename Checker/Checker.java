@@ -34,4 +34,65 @@ public class Checker {
         }
     }
 
+    public boolean checkercardnumber(String number) { // сard verification
+        int a = 0;
+        if (number.length() != 16) { // card number can only have 16 characters
+            System.out.println("Not enough number");
+            return false;
+        }
+
+        for (int i = 0; i < number.length(); i++) {
+            if (number.charAt(i) >= 48 && number.charAt(i) <= 57) { // card number can only have numbers
+                a++;
+            }
+        }
+        if (a > 0) { // if variables а are greater than 0, then the card number was correct
+            return true;
+        } else {
+            System.out.println("Invalid number");
+            return false;
+        }
+    }
+
+    public boolean checkercarddate(String number) { // сard date verification
+        int a = 0, b = 0, c = 0;
+        if (number.length() != 5) { // format of the card date mm/уу, so it cannot contain more than 5 characters
+            System.out.println("Not enough number");
+            return false;
+        }
+
+        for (int i = 0; i < number.length(); i++) {
+            if ((number.charAt(0) >= 48 && number.charAt(i) <= 57) && (number.charAt(0) == 48 || number.charAt(0) == 49)
+                    && (number.charAt(3) == 50 && (number.charAt(4) >= 48 && number.charAt(4) <= 57))) {
+                a++; // a month cannot exceed 12, and the year must be some of the 3rd anniversary
+            }
+        }
+
+        if (number.charAt(2) != '/') { // the third character must be "/"
+            System.out.println("invalid date");
+            return false;
+        }
+        if (a > 0) { // if variables а are greater than 0, then the card date was correct
+            return true;
+        } else {
+            System.out.println("Invalid number");
+            return false;
+        }
+    }
+
+    public boolean checkCVV(String number) { // сvv verification
+        if (number.length() != 3) { // сvv can only have 3 characters
+            System.out.println("Not enough number");
+            return false;
+        }
+        for (int i = 0; i < number.length(); i++) {
+            if (number.charAt(i) <= 48 && number.charAt(i) >= 57) { // сvv consists only of numbers
+                return false;
+
+            }
+        }
+        return true;
+
+    }
+
 }
