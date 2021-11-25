@@ -47,8 +47,6 @@ public class Methods {
                     admin_login();
                     System.exit(1);
                 }
-            }
-            if (rs.next()) { // if the data match, then the application works on
                 System.out.println("You have successfully logged in Customer: " + rs.getString("name"));
             } else {
                 System.out.println("Wrong Username & Password");

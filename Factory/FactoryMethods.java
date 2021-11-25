@@ -48,13 +48,19 @@ public class FactoryMethods {
 
     public void addJeansBlackL() throws SQLException {
         try (Connection connection = connect()) {
-            String sql = "insert into item (type,price,description) VALUES ('Jeans', '20', 'L size, Black')";
-            FactoryMethodJeans factoryjeans = new FactoryMethodJeans();
-            Jeans blackLjeans = factoryjeans.getType("BlackLJeans");
-            System.out.println(blackLjeans.ChooseJeans());
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.executeUpdate();
-            connection.close();
+            String sql1 = "select max(item_id) as last from item";
+            PreparedStatement st = connection.prepareStatement(sql1);
+            ResultSet rs = st.executeQuery();
+            if(rs.next()) {
+                String sql = "insert into item (item_id,type,price,description) VALUES (?,'Jeans', '20', 'L size, Black')";
+                FactoryMethodJeans factoryjeans = new FactoryMethodJeans();
+                Jeans blackLjeans = factoryjeans.getType("BlackLJeans");
+                System.out.println(blackLjeans.ChooseJeans());
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setInt(1,rs.getInt("last")+1);
+                statement.executeUpdate();
+                connection.close();
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -62,13 +68,19 @@ public class FactoryMethods {
 
     public void addJeansBlackS() throws SQLException {
         try (Connection connection = connect()) {
-            String sql = "insert into item (type,price,description) VALUES ('Jeans', '20', 'S size, Black')";
-            FactoryMethodJeans factoryjeans = new FactoryMethodJeans();
-            Jeans blackSjeans = factoryjeans.getType("BlackSJeans");
-            System.out.println(blackSjeans.ChooseJeans());
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.executeUpdate();
-            connection.close();
+            String sql1 = "select max(item_id) as last from item";
+            PreparedStatement st = connection.prepareStatement(sql1);
+            ResultSet rs = st.executeQuery();
+            if(rs.next()) {
+                String sql = "insert into item (item_id,type,price,description) VALUES (?,'Jeans', '20', 'S size, Black')";
+                FactoryMethodJeans factoryjeans = new FactoryMethodJeans();
+                Jeans blackSjeans = factoryjeans.getType("BlackSJeans");
+                System.out.println(blackSjeans.ChooseJeans());
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setInt(1,rs.getInt("last")+1);
+                statement.executeUpdate();
+                connection.close();
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -76,13 +88,19 @@ public class FactoryMethods {
 
     public void addJeansBlueM() throws SQLException {
         try (Connection connection = connect()) {
-            String sql = "insert into item (type,price,description) VALUES ('Jeans', '20', 'M size, Blue')";
-            FactoryMethodJeans factoryjeans = new FactoryMethodJeans();
-            Jeans blueMjeans = factoryjeans.getType("BlueMJeans");
-            System.out.println(blueMjeans.ChooseJeans());
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.executeUpdate();
-            connection.close();
+            String sql1 = "select max(item_id) as last from item";
+            PreparedStatement st = connection.prepareStatement(sql1);
+            ResultSet rs = st.executeQuery();
+            if(rs.next()) {
+                String sql = "insert into item (item_id,type,price,description) VALUES (?,'Jeans', '20', 'M size, Blue')";
+                FactoryMethodJeans factoryjeans = new FactoryMethodJeans();
+                Jeans blueMjeans = factoryjeans.getType("BlueMJeans");
+                System.out.println(blueMjeans.ChooseJeans());
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setInt(1,rs.getInt("last")+1);
+                statement.executeUpdate();
+                connection.close();
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -90,13 +108,19 @@ public class FactoryMethods {
 
     public void addJeansBlueS() throws SQLException {
         try (Connection connection = connect()) {
-            String sql = "insert into item (type,price,description) VALUES ('Jeans', '20', 'S size, Blue')";
-            FactoryMethodJeans factoryjeans = new FactoryMethodJeans();
-            Jeans blueSjeans = factoryjeans.getType("BlueSJeans");
-            System.out.println(blueSjeans.ChooseJeans());
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.executeUpdate();
-            connection.close();
+            String sql1 = "select max(item_id) as last from item";
+            PreparedStatement st = connection.prepareStatement(sql1);
+            ResultSet rs = st.executeQuery();
+            if(rs.next()) {
+                String sql = "insert into item (item_id,type,price,description) VALUES (?,'Jeans', '20', 'S size, Blue')";
+                FactoryMethodJeans factoryjeans = new FactoryMethodJeans();
+                Jeans blueSjeans = factoryjeans.getType("BlueSJeans");
+                System.out.println(blueSjeans.ChooseJeans());
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setInt(1,rs.getInt("last")+1);
+                statement.executeUpdate();
+                connection.close();
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -104,13 +128,19 @@ public class FactoryMethods {
 
     public void addJeansBlueL() throws SQLException {
         try (Connection connection = connect()) {
-            String sql = "insert into item (type,price,description) VALUES ('Jeans', '20', 'L size, Blue')";
-            FactoryMethodJeans factoryjeans = new FactoryMethodJeans();
-            Jeans blueLjeans = factoryjeans.getType("BlueLJeans");
-            System.out.println(blueLjeans.ChooseJeans());
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.executeUpdate();
-            connection.close();
+            String sql1 = "select max(item_id) as last from item";
+            PreparedStatement st = connection.prepareStatement(sql1);
+            ResultSet rs = st.executeQuery();
+            if(rs.next()) {
+                String sql = "insert into item (item_id,type,price,description) VALUES (?,'Jeans', '20', 'L size, Blue')";
+                FactoryMethodJeans factoryjeans = new FactoryMethodJeans();
+                Jeans blueLjeans = factoryjeans.getType("BlueLJeans");
+                System.out.println(blueLjeans.ChooseJeans());
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setInt(1,rs.getInt("last")+1);
+                statement.executeUpdate();
+                connection.close();
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -118,13 +148,19 @@ public class FactoryMethods {
 
     public void addTShirtBlackM() throws SQLException {
         try (Connection connection = connect()) {
-            String sql = "insert into item (type,price,description) VALUES ('T-Shirt', '10', 'M size, Black')";
-            FactoryMethod factory = new FactoryMethod();
-            TShirts blackMshirt = factory.getType("BlackM");
-            System.out.println(blackMshirt.ChooseTShirt());
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.executeUpdate();
-            connection.close();
+            String sql1 = "select max(item_id) as last from item";
+            PreparedStatement st = connection.prepareStatement(sql1);
+            ResultSet rs = st.executeQuery();
+            if(rs.next()) {
+                String sql = "insert into item (item_id,type,price,description) VALUES (?,'TShirt', '30', 'M size, Black')";
+                FactoryMethod factory = new FactoryMethod();
+                TShirts blackMshirt = factory.getType("BlackM");
+                System.out.println(blackMshirt.ChooseTShirt());
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setInt(1,rs.getInt("last")+1);
+                statement.executeUpdate();
+                connection.close();
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -132,13 +168,19 @@ public class FactoryMethods {
 
     public void addTShirtBlackL() throws SQLException {
         try (Connection connection = connect()) {
-            String sql = "insert into item (type,price,description) VALUES ('T-Shirt', '10', 'L size, Black')";
-            FactoryMethod factory = new FactoryMethod();
-            TShirts blackLshirt = factory.getType("BlackL");
-            System.out.println(blackLshirt.ChooseTShirt());
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.executeUpdate();
-            connection.close();
+            String sql1 = "select max(item_id) as last from item";
+            PreparedStatement st = connection.prepareStatement(sql1);
+            ResultSet rs = st.executeQuery();
+            if(rs.next()) {
+                String sql = "insert into item (item_id,type,price,description) VALUES (?,'TShirt', '30', 'L size, Black')";
+                FactoryMethod factory = new FactoryMethod();
+                TShirts blackLshirt = factory.getType("BlackL");
+                System.out.println(blackLshirt.ChooseTShirt());
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setInt(1,rs.getInt("last")+1);
+                statement.executeUpdate();
+                connection.close();
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -146,13 +188,19 @@ public class FactoryMethods {
 
     public void addTShirtBlackS() throws SQLException {
         try (Connection connection = connect()) {
-            String sql = "insert into item (type,price,description) VALUES ('T-Shirt', '10', 'S size, Black')";
-            FactoryMethod factory = new FactoryMethod();
-            TShirts blackSshirt = factory.getType("BlackS");
-            System.out.println(blackSshirt.ChooseTShirt());
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.executeUpdate();
-            connection.close();
+            String sql1 = "select max(item_id) as last from item";
+            PreparedStatement st = connection.prepareStatement(sql1);
+            ResultSet rs = st.executeQuery();
+            if(rs.next()) {
+                String sql = "insert into item (item_id,type,price,description) VALUES (?,'TShirt', '30', 'S size, Black')";
+                FactoryMethod factory = new FactoryMethod();
+                TShirts blackSshirt = factory.getType("BlackS");
+                System.out.println(blackSshirt.ChooseTShirt());
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setInt(1,rs.getInt("last")+1);
+                statement.executeUpdate();
+                connection.close();
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -160,13 +208,19 @@ public class FactoryMethods {
 
     public void addTShirtWhiteM() throws SQLException {
         try (Connection connection = connect()) {
-            String sql = "insert into item (type,price,description) VALUES ('T-Shirt', '10', 'M size, White')";
-            FactoryMethod factory = new FactoryMethod();
-            TShirts whiteMshirt = factory.getType("WhiteM");
-            System.out.println(whiteMshirt.ChooseTShirt());
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.executeUpdate();
-            connection.close();
+            String sql1 = "select max(item_id) as last from item";
+            PreparedStatement st = connection.prepareStatement(sql1);
+            ResultSet rs = st.executeQuery();
+            if(rs.next()) {
+                String sql = "insert into item (item_id,type,price,description) VALUES (?,'TShirt', '30', 'M size, White')";
+                FactoryMethod factory = new FactoryMethod();
+                TShirts whiteMshirt = factory.getType("WhiteM");
+                System.out.println(whiteMshirt.ChooseTShirt());
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setInt(1,rs.getInt("last")+1);
+                statement.executeUpdate();
+                connection.close();
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -174,13 +228,19 @@ public class FactoryMethods {
 
     public void addTShirtWhiteL() throws SQLException {
         try (Connection connection = connect()) {
-            String sql = "insert into item (type,price,description) VALUES ('T-Shirt', '10', 'L size, White')";
-            FactoryMethod factory = new FactoryMethod();
-            TShirts whiteLshirt = factory.getType("WhiteL");
-            System.out.println(whiteLshirt.ChooseTShirt());
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.executeUpdate();
-            connection.close();
+            String sql1 = "select max(item_id) as last from item";
+            PreparedStatement st = connection.prepareStatement(sql1);
+            ResultSet rs = st.executeQuery();
+            if(rs.next()) {
+                String sql = "insert into item (item_id,type,price,description) VALUES (?,'TShirt', '30', 'L size, White')";
+                FactoryMethod factory = new FactoryMethod();
+                TShirts whiteLshirt = factory.getType("WhiteL");
+                System.out.println(whiteLshirt.ChooseTShirt());
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setInt(1,rs.getInt("last")+1);
+                statement.executeUpdate();
+                connection.close();
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -188,13 +248,19 @@ public class FactoryMethods {
 
     public void addTShirtWhiteS() throws SQLException {
         try (Connection connection = connect()) {
-            String sql = "insert into item (type,price,description) VALUES ('T-Shirt', '10', 'S size, White')";
-            FactoryMethod factory = new FactoryMethod();
-            TShirts whiteSshirt = factory.getType("WhiteS");
-            System.out.println(whiteSshirt.ChooseTShirt());
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.executeUpdate();
-            connection.close();
+            String sql1 = "select max(item_id) as last from item";
+            PreparedStatement st = connection.prepareStatement(sql1);
+            ResultSet rs = st.executeQuery();
+            if(rs.next()) {
+                String sql = "insert into item (item_id,type,price,description) VALUES (?,'TShirt', '30', 'S size, White')";
+                FactoryMethod factory = new FactoryMethod();
+                TShirts whiteSshirt = factory.getType("WhiteS");
+                System.out.println(whiteSshirt.ChooseTShirt());
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setInt(1,rs.getInt("last")+1);
+                statement.executeUpdate();
+                connection.close();
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
