@@ -11,6 +11,7 @@ import Decorator.BrandedPackages;
 import Decorator.Delivery;
 import Factory.FactoryMethods;
 import Observer.Observer;
+import Singleton.Message;
 import Strategy.CreditCard;
 import Strategy.PayPal;
 import Strategy.Payment;
@@ -30,6 +31,8 @@ public class Methods {
         return DriverManager.getConnection(url, user, password);
     }
 
+    Message jdbc= Message.getInstance();
+
     public void Login_Cusstomer() throws SQLException {
         try (Connection conn = connect()) {
             PreparedStatement st = (PreparedStatement) conn
@@ -47,8 +50,14 @@ public class Methods {
                     admin_login();
                     System.exit(1);
                 }
-                System.out.println("You have successfully logged in Customer: " + rs.getString("name"));
-            } else {
+                try  {
+                    jdbc.view(log, passw);
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+
+
+        } else {
                 System.out.println("Wrong Username & Password");
                 System.exit(1);
             }
