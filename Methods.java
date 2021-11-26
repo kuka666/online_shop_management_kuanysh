@@ -63,10 +63,7 @@ public class Methods {
         try (Connection conn = connect()) {
             System.out.println("You have successfully logged as Admin");
             FactoryMethods clothes = new FactoryMethods();
-            Observer observer = new Observer();
             clothes.factory_print();
-            System.out.println("Write notifications for customers: ");
-            observer.Notify(scan.nextLine());
             conn.close();
         } catch (SQLException ex) {
             ex.printStackTrace();

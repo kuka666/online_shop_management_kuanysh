@@ -11,6 +11,7 @@ import Decorator.AllContent;
 import Decorator.Bill;
 import Decorator.BrandedPackages;
 import Decorator.Delivery;
+import Observer.Observer;
 import Strategy.CreditCard;
 import Strategy.PayPal;
 import Strategy.Payment;
@@ -273,42 +274,55 @@ public class FactoryMethods {
                         + "\n 7 - Black T-Shirt with M size, \n 8 - Black T-Shirt with L size,\n 9 - Black T-Shirt with S size,"
                         + "\n 10 - White T-Shirt with M size,\n 11 - White T-Shirt with L size,\n 12 - White T-Shirt with S size");
         int items = scan.nextInt();
+        Observer observer = new Observer();
         switch (items) {
         case 1:
             addJeansBlackM();
+            observer.Notify("New Black Jeans");
             break;
         case 2:
             addJeansBlackL();
+            observer.Notify("New Black Jeans");
             break;
         case 3:
             addJeansBlackS();
+            observer.Notify("New Black Jeans");
             break;
         case 4:
             addJeansBlueM();
+            observer.Notify("New Blue Jeans");
             break;
         case 5:
             addJeansBlueL();
+            observer.Notify("New Blue Jeans");
             break;
         case 6:
             addJeansBlueS();
+            observer.Notify("New Blue Jeans");
             break;
         case 7:
             addTShirtBlackM();
+            observer.Notify("New Black T-Shirt");
             break;
         case 8:
             addTShirtBlackL();
+            observer.Notify("New Black T-Shirt");
             break;
         case 9:
             addTShirtBlackS();
+            observer.Notify("New Black T-Shirt");
             break;
         case 10:
             addTShirtWhiteM();
+            observer.Notify("New White T-Shirt");
             break;
         case 11:
             addTShirtWhiteL();
+            observer.Notify("New White T-Shirt");
             break;
         case 12:
             addTShirtWhiteS();
+            observer.Notify("New White T-Shirt");
             break;
         default:
             System.out.println("");
